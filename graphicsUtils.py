@@ -18,9 +18,8 @@ import random
 import string
 import time
 import types
-import Tkinter
-import os.path
-
+#import Tkinter
+import tkinter
 _Windows = sys.platform == 'win32'  # True if on Win95/98/NT
 
 _root_window = None      # The root window for graphics output
@@ -69,14 +68,14 @@ def begin_graphics(width=640, height=480, color=formatColor(0, 0, 0), title=None
     _bg_color = color
 
     # Create the root window
-    _root_window = Tkinter.Tk()
+    _root_window = tkinter.Tk()
     _root_window.protocol('WM_DELETE_WINDOW', _destroy_window)
     _root_window.title(title or 'Graphics Window')
     _root_window.resizable(0, 0)
 
     # Create the canvas object
     try:
-        _canvas = Tkinter.Canvas(_root_window, width=width, height=height)
+        _canvas = tkinter.Canvas(_root_window, width=width, height=height)
         _canvas.pack()
         draw_background()
         _canvas.update()
@@ -148,8 +147,8 @@ def end_graphics():
             sleep(1)
             if _root_window != None:
                 _root_window.destroy()
-        except SystemExit, e:
-            print 'Ending graphics raised an exception:', e
+        except SystemExit(e):
+            print ('Ending graphics raised an exception:', e)
     finally:
         _root_window = None
         _canvas = None
@@ -215,10 +214,7 @@ def moveCircle(id, pos, r, endpoints=None):
         e = list(endpoints)
     while e[0] > e[1]: e[1] = e[1] + 360
 
-    if os.path.isfile('flag'):
-        edit(id, ('extent', e[1] - e[0]))
-    else:
-        edit(id, ('start', e[0]), ('extent', e[1] - e[0]))
+    edit(id, ('start', e[0]), ('extent', e[1] - e[0]))
     move_to(id, x0, y0)
 
 def edit(id, *args):
@@ -291,8 +287,8 @@ def _clear_keys(event=None):
     _keyswaiting = {}
     _got_release = None
 
-def keys_pressed(d_o_e=Tkinter.tkinter.dooneevent,
-                 d_w=Tkinter.tkinter.DONT_WAIT):
+def keys_pressed(d_o_e=lambda arg: _root_window.dooneevent(arg),
+        d_w=tkinter._tkinter.DONT_WAIT):
     d_o_e(d_w)
     if _got_release:
         d_o_e(d_w)
@@ -313,9 +309,8 @@ def wait_for_keys():
         sleep(0.05)
     return keys
 
-def remove_from_screen(x,
-                       d_o_e=Tkinter.tkinter.dooneevent,
-                       d_w=Tkinter.tkinter.DONT_WAIT):
+def remove_from_screen(x,d_o_e=lambda arg: _root_window.dooneevent(arg),
+        d_w=tkinter._tkinter.DONT_WAIT):
     _canvas.delete(x)
     d_o_e(d_w)
 
@@ -325,9 +320,8 @@ def _adjust_coords(coord_list, x, y):
         coord_list[i + 1] = coord_list[i + 1] + y
     return coord_list
 
-def move_to(object, x, y=None,
-            d_o_e=Tkinter.tkinter.dooneevent,
-            d_w=Tkinter.tkinter.DONT_WAIT):
+def move_to(object, x, y=None,d_o_e=lambda arg: _root_window.dooneevent(arg),
+        d_w=tkinter._tkinter.DONT_WAIT):
     if y is None:
         try: x, y = x
         except: raise  'incomprehensible coordinates'
@@ -348,11 +342,11 @@ def move_to(object, x, y=None,
     d_o_e(d_w)
 
 def move_by(object, x, y=None,
-            d_o_e=Tkinter.tkinter.dooneevent,
-            d_w=Tkinter.tkinter.DONT_WAIT, lift=False):
+            d_o_e=lambda arg: _root_window.dooneevent(arg),
+        d_w=tkinter._tkinter.DONT_WAIT, lift=False):
     if y is None:
         try: x, y = x
-        except: raise Exception, 'incomprehensible coordinates'
+        except: raise Exception('incomprehensible coordinates')
 
     horiz = True
     newCoords = []

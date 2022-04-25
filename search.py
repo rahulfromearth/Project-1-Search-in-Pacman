@@ -18,7 +18,7 @@ Pacman agents (in searchAgents.py).
 """
 
 import util
-
+import searchAgents
 class SearchProblem:
     """
     This class outlines the structure of a search problem, but doesn't implement
@@ -205,9 +205,43 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 
     util.raiseNotDefined()
 
+def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
+    """Search the node that has the lowest combined cost and heuristic first."""
+    "*** YOUR CODE HERE ***"
+
+    startingNode = problem.getStartState()
+    if problem.isGoalState(startingNode):
+        return []
+
+    visitedNodes = []
+
+    pQueue = util.PriorityQueue()
+    #((coordinate/node , action to current node , cost to current node),priority)
+    pQueue.push((startingNode, []), 0)
+
+    while not pQueue.isEmpty():
+
+        currentNode, actions = pQueue.pop()
+
+        if currentNode not in visitedNodes:
+            visitedNodes.append(currentNode)
+
+            if problem.isGoalState(currentNode):
+                return actions
+
+            for nextNode, action, cost in problem.getSuccessors(currentNode):
+                newAction = actions + [action]
+                #newCostToNode = prevCost + cost
+                heuristicCost=searchAgents.euclideanHeuristic(nextNode,problem)
+                pQueue.push((nextNode, newAction),heuristicCost)
+
+    util.raiseNotDefined()
+
+
 
 # Abbreviations
 bfs = breadthFirstSearch
 dfs = depthFirstSearch
 astar = aStarSearch
 ucs = uniformCostSearch
+gbfs= greedyBestFirstSearch
