@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -19,6 +19,8 @@ Pacman agents (in searchAgents.py).
 
 import util
 import searchAgents
+
+
 class SearchProblem:
     """
     This class outlines the structure of a search problem, but doesn't implement
@@ -68,9 +70,11 @@ def tinyMazeSearch(problem):
     sequence of moves will be incorrect, so only use this for tinyMaze.
     """
     from game import Directions
+
     s = Directions.SOUTH
     w = Directions.WEST
-    return  [s, s, w, s, w, w, s, w]
+    return [s, s, w, s, w, w, s, w]
+
 
 def depthFirstSearch(problem):
     """
@@ -110,6 +114,7 @@ def depthFirstSearch(problem):
                 newAction = actions + [action]
                 myQueue.push((nextNode, newAction))
 
+
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
@@ -137,6 +142,7 @@ def breadthFirstSearch(problem):
 
     util.raiseNotDefined()
 
+
 def uniformCostSearch(problem):
     "Search the node of least total cost first. "
     "*** YOUR CODE HERE ***"
@@ -148,7 +154,7 @@ def uniformCostSearch(problem):
     visitedNodes = []
 
     pQueue = util.PriorityQueue()
-    #((coordinate/node , action to current node , cost to current node),priority)
+    # ((coordinate/node , action to current node , cost to current node),priority)
     pQueue.push((startingNode, [], 0), 0)
 
     while not pQueue.isEmpty():
@@ -163,8 +169,9 @@ def uniformCostSearch(problem):
             for nextNode, action, cost in problem.getSuccessors(currentNode):
                 newAction = actions + [action]
                 priority = prevCost + cost
-                pQueue.push((nextNode, newAction, priority),priority)
+                pQueue.push((nextNode, newAction, priority), priority)
     util.raiseNotDefined()
+
 
 def nullHeuristic(state, problem=None):
     """
@@ -172,6 +179,7 @@ def nullHeuristic(state, problem=None):
     goal in the provided SearchProblem.  This heuristic is trivial.
     """
     return 0
+
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
@@ -184,7 +192,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     visitedNodes = []
 
     pQueue = util.PriorityQueue()
-    #((coordinate/node , action to current node , cost to current node),priority)
+    # ((coordinate/node , action to current node , cost to current node),priority)
     pQueue.push((startingNode, [], 0), 0)
 
     while not pQueue.isEmpty():
@@ -200,10 +208,11 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             for nextNode, action, cost in problem.getSuccessors(currentNode):
                 newAction = actions + [action]
                 newCostToNode = prevCost + cost
-                heuristicCost = newCostToNode + heuristic(nextNode,problem)
-                pQueue.push((nextNode, newAction, newCostToNode),heuristicCost)
+                heuristicCost = newCostToNode + heuristic(nextNode, problem)
+                pQueue.push((nextNode, newAction, newCostToNode), heuristicCost)
 
     util.raiseNotDefined()
+
 
 def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
@@ -216,7 +225,7 @@ def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
     visitedNodes = []
 
     pQueue = util.PriorityQueue()
-    #((coordinate/node , action to current node , cost to current node),priority)
+    # ((coordinate/node , action to current node , cost to current node),priority)
     pQueue.push((startingNode, []), 0)
 
     while not pQueue.isEmpty():
@@ -231,12 +240,11 @@ def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
 
             for nextNode, action, cost in problem.getSuccessors(currentNode):
                 newAction = actions + [action]
-                #newCostToNode = prevCost + cost
-                heuristicCost=searchAgents.euclideanHeuristic(nextNode,problem)
-                pQueue.push((nextNode, newAction),heuristicCost)
+                # newCostToNode = prevCost + cost
+                heuristicCost = searchAgents.euclideanHeuristic(nextNode, problem)
+                pQueue.push((nextNode, newAction), heuristicCost)
 
     util.raiseNotDefined()
-
 
 
 # Abbreviations
@@ -244,4 +252,5 @@ bfs = breadthFirstSearch
 dfs = depthFirstSearch
 astar = aStarSearch
 ucs = uniformCostSearch
-gbfs= greedyBestFirstSearch
+gbfs = greedyBestFirstSearch
+
