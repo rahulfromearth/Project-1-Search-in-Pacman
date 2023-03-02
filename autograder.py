@@ -126,6 +126,7 @@ def loadModuleString(moduleSource):
     #f = StringIO(moduleCodeDict[k])
     #tmp = imp.load_module(k, f, k, (".py", "r", imp.PY_SOURCE))
     tmp = imp.new_module(k)
+    # TODO fix this
     exec (moduleCodeDict[k] in tmp.__dict__)
     setModuleName(tmp, k)
     return tmp
@@ -301,8 +302,13 @@ def evaluate(generateSolutions, testRoot, moduleDict, exceptionMap=ERROR_HINT_MA
         setattr(sys.modules[__name__], q, makefun(question))
         questions.append((q, question.getMaxPoints()))
 
-    grades = grading.Grades(projectParams.PROJECT_NAME, questions,
-                            gsOutput=gsOutput, edxOutput=edxOutput, muteOutput=muteOutput)
+    grades = grading.Grades(
+        projectParams.PROJECT_NAME,
+        questions,
+        gsOutput=gsOutput,
+        edxOutput=edxOutput,
+        muteOutput=muteOutput
+    )
     if questionToGrade == None:
         for q in questionDicts:
             for prereq in questionDicts[q].get('depends', '').split():
@@ -349,10 +355,17 @@ if __name__ == '__main__':
     moduleDict['projectTestClasses'] = loadModuleFile(moduleName, os.path.join(options.codeRoot, options.testCaseCode))
 
 
-    if options.runTest != None:
+    if options.runTest is not None:
         runTest(options.runTest, moduleDict, printTestCase=options.printTestCase, display=getDisplay(True, options))
     else:
-        evaluate(options.generateSolutions, options.testRoot, moduleDict,
+        evaluate(
+            options.generateSolutions,
+            options.testRoot,
+            moduleDict,
             gsOutput=options.gsOutput,
-            edxOutput=options.edxOutput, muteOutput=options.muteOutput, printTestCase=options.printTestCase,
-            questionToGrade=options.gradeQuestion, display=getDisplay(options.gradeQuestion!=None, options))
+            edxOutput=options.edxOutput,
+            muteOutput=options.muteOutput,
+            printTestCase=options.printTestCase,
+            questionToGrade=options.gradeQuestion,
+            display=getDisplay(options.gradeQuestion!=None, options)
+        )

@@ -619,8 +619,8 @@ class TimeoutFunctionException(Exception):
 
 class TimeoutFunction:
     def __init__(self, function, timeout):
-        self.timeout = timeout
         self.function = function
+        self.timeout = timeout
 
     def handle_timeout(self, signum, frame):
         raise TimeoutFunctionException()

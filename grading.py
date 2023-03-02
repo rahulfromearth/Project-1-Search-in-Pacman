@@ -75,7 +75,7 @@ class Grades:
 
       if self.mute: util.mutePrint()
       try:
-        util.TimeoutFunction(getattr(gradingModule, q),1800)(self) # Call the question's function
+        util.TimeoutFunction(getattr(gradingModule, q), 1800)(self) # Call the question's function
         #TimeoutFunction(getattr(gradingModule, q),1200)(self) # Call the question's function
       except Exception as inst:
         self.addExceptionMessage(q, inst, traceback)
@@ -210,60 +210,59 @@ to follow your instructor's guidelines to receive credit on your project.
     return
 
   def produceOutput(self):
-    edxOutput = open('edx_response.html', 'w')
-    edxOutput.write("<div>")
+    with open('edx_response.html', 'w') as edxOutput:
+      edxOutput.write("<div>")
 
-    # first sum
-    total_possible = sum(self.maxes.values())
-    total_score = sum(self.points.values())
-    checkOrX = '<span class="incorrect"/>'
-    if (total_score >= total_possible):
-        checkOrX = '<span class="correct"/>'
-    header = """
-        <h3>
-            Total score ({total_score} / {total_possible})
-        </h3>
-    """.format(total_score = total_score,
-      total_possible = total_possible,
-      checkOrX = checkOrX
-    )
-    edxOutput.write(header)
-
-    for q in self.questions:
-      if len(q) == 2:
-          name = q[1]
-      else:
-          name = q
+      # first sum
+      total_possible = sum(self.maxes.values())
+      total_score = sum(self.points.values())
       checkOrX = '<span class="incorrect"/>'
-      if (self.points[q] >= self.maxes[q]):
-        checkOrX = '<span class="correct"/>'
-      #messages = '\n<br/>\n'.join(self.messages[q])
-      messages = "<pre>%s</pre>" % '\n'.join(self.messages[q])
-      output = """
-        <div class="test">
-          <section>
-          <div class="shortform">
-            Question {q} ({points}/{max}) {checkOrX}
-          </div>
-        <div class="longform">
-          {messages}
-        </div>
-        </section>
-      </div>
-      """.format(q = name,
-        max = self.maxes[q],
-        messages = messages,
-        checkOrX = checkOrX,
-        points = self.points[q]
+      if (total_score >= total_possible):
+          checkOrX = '<span class="correct"/>'
+      header = """
+          <h3>
+              Total score ({total_score} / {total_possible})
+          </h3>
+      """.format(total_score = total_score,
+        total_possible = total_possible,
+        checkOrX = checkOrX
       )
-      # print "*** output for Question %s " % q[1]
-      # print output
-      edxOutput.write(output)
-    edxOutput.write("</div>")
-    edxOutput.close()
-    edxOutput = open('edx_grade', 'w')
-    edxOutput.write(str(self.points.totalCount()))
-    edxOutput.close()
+      edxOutput.write(header)
+
+      for q in self.questions:
+        if len(q) == 2:
+            name = q[1]
+        else:
+            name = q
+        checkOrX = '<span class="incorrect"/>'
+        if (self.points[q] >= self.maxes[q]):
+          checkOrX = '<span class="correct"/>'
+        #messages = '\n<br/>\n'.join(self.messages[q])
+        messages = "<pre>%s</pre>" % '\n'.join(self.messages[q])
+        output = """
+          <div class="test">
+            <section>
+            <div class="shortform">
+              Question {q} ({points}/{max}) {checkOrX}
+            </div>
+          <div class="longform">
+            {messages}
+          </div>
+          </section>
+        </div>
+        """.format(q = name,
+          max = self.maxes[q],
+          messages = messages,
+          checkOrX = checkOrX,
+          points = self.points[q]
+        )
+        # print("*** output for Question %s " % q[1])
+        # print(output)
+        edxOutput.write(output)
+      edxOutput.write("</div>")
+
+    with open('edx_grade', 'w') as edxOutput:
+      edxOutput.write(str(self.points.totalCount()))
 
   def fail(self, message, raw=False):
     "Sets sanity check bit to false and outputs a message"

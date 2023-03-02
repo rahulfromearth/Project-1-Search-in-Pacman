@@ -15,6 +15,7 @@
 import re
 import testClasses
 import textwrap
+import pprint
 
 # import project specific code
 import layout
@@ -70,7 +71,7 @@ class GraphSearch(SearchProblem):
             print('"""%s"""' % graph_text)
             raise Exception("GraphSearch graph specification goal_states not found or incorrect on line:" + l)
         goals = r.group(1).split()
-        self.goals = map(str.strip, goals)
+        self.goals = list(map(str.strip, goals))
         self.successors = {}
         all_states = set()
         self.orderedSuccessorTuples = []
@@ -771,7 +772,7 @@ class CornerHeuristicPacman(testClasses.TestCase):
         searchAgents = moduleDict['searchAgents']
         total = 0
         true_cost = float(solutionDict['cost'])
-        thresholds = map(int, solutionDict['thresholds'].split())
+        thresholds = list(map(int, solutionDict['thresholds'].split()))
         game_state = pacman.GameState()
         lay = layout.Layout([l.strip() for l in self.layout_text.split('\n')])
         game_state.initialize(lay, 0)
@@ -803,20 +804,19 @@ class CornerHeuristicPacman(testClasses.TestCase):
         search = moduleDict['search']
         searchAgents = moduleDict['searchAgents']
         # write comment
-        handle = open(filePath, 'w')
-        handle.write('# This solution file specifies the length of the optimal path\n')
-        handle.write('# as well as the thresholds on number of nodes expanded to be\n')
-        handle.write('# used in scoring.\n')
+        with open(filePath, 'w') as handle:
+            handle.write('# This solution file specifies the length of the optimal path\n')
+            handle.write('# as well as the thresholds on number of nodes expanded to be\n')
+            handle.write('# used in scoring.\n')
 
-        # solve problem and write solution
-        lay = layout.Layout([l.strip() for l in self.layout_text.split('\n')])
-        start_state = pacman.GameState()
-        start_state.initialize(lay, 0)
-        problem = searchAgents.CornersProblem(start_state)
-        solution = search.astar(problem, searchAgents.cornersHeuristic)
-        handle.write('cost: "%d"\n' % len(solution))
-        handle.write('path: """\n%s\n"""\n' % wrap_solution(solution))
-        handle.write('thresholds: "2000 1600 1200"\n')
-        handle.close()
+            # solve problem and write solution
+            lay = layout.Layout([l.strip() for l in self.layout_text.split('\n')])
+            start_state = pacman.GameState()
+            start_state.initialize(lay, 0)
+            problem = searchAgents.CornersProblem(start_state)
+            solution = search.astar(problem, searchAgents.cornersHeuristic)
+            handle.write('cost: "%d"\n' % len(solution))
+            handle.write('path: """\n%s\n"""\n' % wrap_solution(solution))
+            handle.write('thresholds: "2000 1600 1200"\n')
         return True
 

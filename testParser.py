@@ -45,7 +45,7 @@ class TestParser(object):
         lines = test_text.split('\n')
         i = 0
         # read a property in each loop cycle
-        while(i < len(lines)):
+        while i < len(lines):
             # skip blank lines
             if re.match('\A\s*\Z', lines[i]):
                 test['__emit__'].append(("raw", raw_lines[i]))

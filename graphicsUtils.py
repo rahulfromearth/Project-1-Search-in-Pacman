@@ -386,6 +386,7 @@ ghost_shape = [
     (- 0.25, - 0.75)
   ]
 
+# TODO optimize
 if __name__ == '__main__':
     begin_graphics()
     clear_screen()
