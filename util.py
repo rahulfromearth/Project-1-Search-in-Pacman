@@ -454,7 +454,7 @@ def raiseNotDefined():
     line = inspect.stack()[1][2]
     method = inspect.stack()[1][3]
 
-    print ("*** Method not implemented: %s at line %s of %s") % (method, line, fileName)
+    print ("*** Method not implemented: %s at line %s of %s" % (method, line, fileName))
     sys.exit(1)
 
 def normalize(vectorOrCounter):
@@ -592,14 +592,14 @@ def lookup(name, namespace):
         options += [obj[1] for obj in namespace.items() if obj[0] == name ]
         if len(options) == 1: return options[0]
         if len(options) > 1: raise Exception('Name conflict for %s')
-        raise Exception('%s not found as a method or class') % name
+        raise Exception('%s not found as a method or class' % name)
 
 def pause():
     """
     Pauses the output stream awaiting user feedback.
     """
     print ("<Press enter/return to continue>")
-    raw_input()
+    input()
 
 
 # code to handle timeouts
