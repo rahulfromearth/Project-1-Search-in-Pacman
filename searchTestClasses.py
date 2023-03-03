@@ -333,12 +333,11 @@ class PacmanSearchTest(testClasses.TestCase):
         from game import Directions
 
         dirs = Directions.LEFT.keys()
-        if [el in dirs for el in solution].count(False) != 0:
+        if any(el not in dirs for el in solution):
             return (
                 None,
                 None,
-                "Output of %s must be a list of actions from game.Directions"
-                % self.alg,
+                f"Output of {self.alg} must be a list of actions from game.Directions but is {solution}",
             )
 
         expanded = problem._expanded

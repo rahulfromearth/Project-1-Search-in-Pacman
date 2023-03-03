@@ -140,8 +140,6 @@ def breadthFirstSearch(problem):
                 newAction = actions + [action]
                 myQueue.push((nextNode, newAction))
 
-    util.raiseNotDefined()
-
 
 def uniformCostSearch(problem):
     "Search the node of least total cost first. "
@@ -170,7 +168,6 @@ def uniformCostSearch(problem):
                 newAction = actions + [action]
                 priority = prevCost + cost
                 pQueue.push((nextNode, newAction, priority), priority)
-    util.raiseNotDefined()
 
 
 def nullHeuristic(state, problem=None):
@@ -211,8 +208,6 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                 heuristicCost = newCostToNode + heuristic(nextNode, problem)
                 pQueue.push((nextNode, newAction, newCostToNode), heuristicCost)
 
-    util.raiseNotDefined()
-
 
 def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
@@ -243,8 +238,6 @@ def greedyBestFirstSearch(problem, heuristic=nullHeuristic):
                 # newCostToNode = prevCost + cost
                 heuristicCost = searchAgents.euclideanHeuristic(nextNode, problem)
                 pQueue.push((nextNode, newAction), heuristicCost)
-
-    util.raiseNotDefined()
 
 
 # Abbreviations

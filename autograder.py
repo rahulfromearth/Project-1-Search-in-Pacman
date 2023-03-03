@@ -13,14 +13,20 @@
 
 
 # imports from python standard library
-import grading
-import imp
+import importlib.util
 import optparse
 import os
+from pathlib import Path
+import random
 import re
 import sys
+from typing import TYPE_CHECKING
+
+import grading
 import projectParams
-import random
+
+if TYPE_CHECKING:
+    import types
 
 random.seed(0)
 try:
@@ -157,7 +163,7 @@ def setModuleName(module, filename):
 
 
 def loadModuleString(moduleSource):
-    # Below broken, imp doesn't believe its being passed a file:
+    # Below broken, imp doesn't believe it's being passed a file:
     #    ValueError: load_module arg#2 should be a file or None
     #
     # f = StringIO(moduleCodeDict[k])
@@ -169,14 +175,24 @@ def loadModuleString(moduleSource):
     return tmp
 
 
-import py_compile
+# import py_compile
 
 
-def loadModuleFile(moduleName, filePath):
-    with open(filePath, "r") as f:
-        return imp.load_module(
-            moduleName, f, "%s.py" % moduleName, (".py", "r", imp.PY_SOURCE)
-        )
+# https://stackoverflow.com/a/41595552/6949755
+def loadModuleFile(moduleName: str, filePath) -> "types.ModuleType":    
+    spec = importlib.util.spec_from_file_location(moduleName, filePath)
+    if spec is None:
+        raise ImportError(f"Could not load spec for module '{moduleName}' at: {filePath}")
+
+    module = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(module)
+        # sys.modules[moduleName] = module
+    except FileNotFoundError as e:
+        raise ImportError(f"{e.strerror}: {filePath}") from e
+    return module
+
+
 
 
 def readFile(path, root=""):
@@ -239,8 +255,8 @@ def printTest(testDict, solutionDict):
 
 
 def runTest(testName, moduleDict, printTestCase=False, display=None):
-    import testParser
     import testClasses
+    import testParser
 
     for module in moduleDict:
         setattr(sys.modules[__name__], module, moduleDict[module])
@@ -308,8 +324,8 @@ def evaluate(
 ):
     # imports of testbench code.  note that the testClasses import must follow
     # the import of student code due to dependencies
-    import testParser
     import testClasses
+    import testParser
 
     for module in moduleDict:
         setattr(sys.modules[__name__], module, moduleDict[module])
@@ -446,5 +462,5 @@ if __name__ == "__main__":
             muteOutput=options.muteOutput,
             printTestCase=options.printTestCase,
             questionToGrade=options.gradeQuestion,
-            display=getDisplay(options.gradeQuestion != None, options),
+            display=getDisplay(options.gradeQuestion is not None, options),
         )
