@@ -99,7 +99,7 @@ class Configuration:
         return x == int(x) and y == int(y)
 
     def __eq__(self, other):
-        if other == None:
+        if other is None:
             return False
         return self.pos == other.pos and self.direction == other.direction
 
@@ -147,7 +147,7 @@ class AgentState:
             return "Ghost: " + str(self.configuration)
 
     def __eq__(self, other):
-        if other == None:
+        if other is None:
             return False
         return (
             self.configuration == other.configuration
@@ -166,7 +166,7 @@ class AgentState:
         return state
 
     def getPosition(self):
-        if self.configuration == None:
+        if self.configuration is None:
             return None
         return self.configuration.getPosition()
 
@@ -209,7 +209,7 @@ class Grid:
         return "\n".join(["".join(x) for x in out])
 
     def __eq__(self, other):
-        if other == None:
+        if other is None:
             return False
         return self.data == other.data
 
@@ -453,7 +453,7 @@ class GameStateData:
         """
         Allows two states to be compared.
         """
-        if other == None:
+        if other is None:
             return False
         # TODO Check for type of other
         if not self.agentStates == other.agentStates:
@@ -497,9 +497,9 @@ class GameStateData:
                 map[x][y] = self._foodWallStr(food[x][y], walls[x][y])
 
         for agentState in self.agentStates:
-            if agentState == None:
+            if agentState is None:
                 continue
-            if agentState.configuration == None:
+            if agentState.configuration is None:
                 continue
             x, y = [int(i) for i in nearestPoint(agentState.configuration.pos)]
             agent_dir = agentState.configuration.direction

@@ -179,7 +179,7 @@ def loadModuleString(moduleSource):
 
 
 # https://stackoverflow.com/a/41595552/6949755
-def loadModuleFile(moduleName: str, filePath) -> "types.ModuleType":    
+def loadModuleFile(moduleName: str, filePath: str | Path) -> "types.ModuleType":    
     spec = importlib.util.spec_from_file_location(moduleName, filePath)
     if spec is None:
         raise ImportError(f"Could not load spec for module '{moduleName}' at: {filePath}")
@@ -397,7 +397,7 @@ def evaluate(
         edxOutput=edxOutput,
         muteOutput=muteOutput,
     )
-    if questionToGrade == None:
+    if questionToGrade is None:
         for q in questionDicts:
             for prereq in questionDicts[q].get("depends", "").split():
                 grades.addPrereq(q, prereq)
@@ -426,7 +426,7 @@ if __name__ == "__main__":
     options = readCommand(sys.argv)
     if options.generateSolutions:
         confirmGenerate()
-    codePaths = options.studentCode.split(",")
+    codePaths: list[str] = options.studentCode.split(",")
     # moduleCodeDict = {}
     # for cp in codePaths:
     #     moduleName = re.match('.*?([^/]*)\.py', cp).group(1)
@@ -434,7 +434,7 @@ if __name__ == "__main__":
     # moduleCodeDict['projectTestClasses'] = readFile(options.testCaseCode, root=options.codeRoot)
     # moduleDict = loadModuleDict(moduleCodeDict)
 
-    moduleDict = {}
+    moduleDict: dict[str, 'types.ModuleType'] = {}
     for cp in codePaths:
         moduleName = re.match(".*?([^/]*)\.py", cp).group(1)
         moduleDict[moduleName] = loadModuleFile(

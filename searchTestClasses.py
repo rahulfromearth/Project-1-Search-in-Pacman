@@ -62,7 +62,7 @@ class GraphSearch(SearchProblem):
         self.expanded_states = []
         lines = graph_text.split("\n")
         r = re.match("start_state:(.*)", lines[0])
-        if r == None:
+        if r is None:
             print("Broken graph:")
             print('"""%s"""' % graph_text)
             raise Exception(
@@ -71,7 +71,7 @@ class GraphSearch(SearchProblem):
             )
         self.start_state = r.group(1).strip()
         r = re.match("goal_states:(.*)", lines[1])
-        if r == None:
+        if r is None:
             print("Broken graph:")
             print('"""%s"""' % graph_text)
             raise Exception(

@@ -164,13 +164,13 @@ class Layout:
 def getLayout(name, back=2):
     if name.endswith(".lay"):
         layout = tryToLoad("layouts/" + name)
-        if layout == None:
+        if layout is None:
             layout = tryToLoad(name)
     else:
         layout = tryToLoad("layouts/" + name + ".lay")
-        if layout == None:
+        if layout is None:
             layout = tryToLoad(name + ".lay")
-    if layout == None and back >= 0:
+    if layout is None and back >= 0:
         curdir = os.path.abspath(".")
         os.chdir("..")
         layout = getLayout(name, back - 1)

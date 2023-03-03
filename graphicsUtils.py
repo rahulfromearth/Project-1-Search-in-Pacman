@@ -52,7 +52,7 @@ else:
 
 def sleep(secs):
     global _root_window
-    if _root_window == None:
+    if _root_window is None:
         time.sleep(secs)
     else:
         _root_window.update_idletasks()
@@ -187,7 +187,7 @@ def polygon(
     for coord in coords:
         c.append(coord[0])
         c.append(coord[1])
-    if fillColor == None:
+    if fillColor is None:
         fillColor = outlineColor
     if filled == 0:
         fillColor = ""
@@ -209,7 +209,7 @@ def circle(pos, r, outlineColor, fillColor, endpoints=None, style="pieslice", wi
     x, y = pos
     x0, x1 = x - r - 1, x + r
     y0, y1 = y - r - 1, y + r
-    if endpoints == None:
+    if endpoints is None:
         e = [0, 359]
     else:
         e = list(endpoints)
@@ -250,7 +250,7 @@ def moveCircle(id, pos, r, endpoints=None):
     #    y0, y1 = y - r, y + r + 1
     x0, x1 = x - r - 1, x + r
     y0, y1 = y - r - 1, y + r
-    if endpoints == None:
+    if endpoints is None:
         e = [0, 359]
     else:
         e = list(endpoints)

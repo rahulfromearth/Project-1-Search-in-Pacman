@@ -503,7 +503,7 @@ def default(str):
 
 
 def parseAgentArgs(str):
-    if str == None:
+    if str is None:
         return {}
     pieces = str.split(",")
     opts = {}
@@ -669,11 +669,11 @@ def readCommand(argv):
 
     # Choose a layout
     args["layout"] = layout.getLayout(options.layout)
-    if args["layout"] == None:
+    if args["layout"] is None:
         raise Exception("The layout " + options.layout + " cannot be found")
 
     # Choose a Pacman agent
-    noKeyboard = options.gameToReplay == None and (
+    noKeyboard = options.gameToReplay is None and (
         options.textGraphics or options.quietGraphics
     )
     pacmanType = loadAgent(options.pacman, noKeyboard)
@@ -800,7 +800,7 @@ def runGames(
     games = []
 
     for i in range(numGames):
-        beQuiet = i < numTraining
+        beQuiet: bool = i < numTraining
         if beQuiet:
             # Suppress output and graphics
             import textDisplay

@@ -94,7 +94,7 @@ class InfoPane:
         """
           Translates a point relative from the bottom left of the info pane.
         """
-        if y == None:
+        if y is None:
             x, y = pos
         else:
             x = pos
@@ -501,12 +501,12 @@ class PacmanGraphics:
         refresh()
 
     def getPosition(self, agentState):
-        if agentState.configuration == None:
+        if agentState.configuration is None:
             return (-1000, -1000)
         return agentState.getPosition()
 
     def getDirection(self, agentState):
-        if agentState.configuration == None:
+        if agentState.configuration is None:
             return Directions.STOP
         return agentState.configuration.getDirection()
 
@@ -979,7 +979,7 @@ class PacmanGraphics:
         "Draws an agent's belief distributions"
         # copy all distributions so we don't change their state
         distributions = map(lambda x: x.copy(), distributions)
-        if self.distributionImages == None:
+        if self.distributionImages is None:
             self.drawDistributions(self.previousState)
         for x in range(len(self.distributionImages)):
             for y in range(len(self.distributionImages[0])):
