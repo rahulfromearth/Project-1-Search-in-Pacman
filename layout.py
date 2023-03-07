@@ -12,6 +12,7 @@
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
 
 
+from functools import reduce
 from util import manhattanDistance
 from game import Grid
 import os

@@ -55,4 +55,10 @@ Worked as problem 6.There is no difference between bfs,ucs,astar as far as path 
 ######NOTE : The old DFS gave a path cost of 514 but the new one that passes the autograder gives a very expensive path of 5324 cost. 
 
 
+TODO
+If one test is skipped, whole question skips
+autograder.evaluate
 
+https://stackoverflow.com/questions/51629105/python-type-hint-given-as-a-string
+https://docs.python.org/3/library/typing.html
+https://stackoverflow.com/questions/61622881/transition-from-imp-to-importlib

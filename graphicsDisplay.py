@@ -381,8 +381,8 @@ class PacmanGraphics:
         WHITE = formatColor(1.0, 1.0, 1.0)
         BLACK = formatColor(0.0, 0.0, 0.0)
 
-        dx = 0
-        dy = 0
+        dx: float = 0
+        dy: float = 0
         if dir == "North":
             dy = -0.2
         if dir == "South":
@@ -438,8 +438,8 @@ class PacmanGraphics:
 
     def moveEyes(self, pos, dir, eyes):
         (screen_x, screen_y) = self.to_screen(pos)
-        dx = 0
-        dy = 0
+        dx: float = 0
+        dy: float = 0
         if dir == "North":
             dy = -0.2
         if dir == "South":

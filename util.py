@@ -881,7 +881,7 @@ class Counter(dict):
         """
         return sum(self.values())
 
-    def normalize(self):
+    def normalize(self) -> None:
         """
         Edits the counter such that the total count of all
         keys sums to 1.  The ratio of counts for all keys
@@ -1005,7 +1005,7 @@ class Counter(dict):
         return addend
 
 
-def raiseNotDefined():
+def raiseNotDefined() -> None:
     fileName = inspect.stack()[1][1]
     line = inspect.stack()[1][2]
     method = inspect.stack()[1][3]

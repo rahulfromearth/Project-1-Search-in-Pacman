@@ -16,10 +16,10 @@
 import importlib.util
 import optparse
 import os
-from pathlib import Path
 import random
 import re
 import sys
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 import grading
@@ -33,6 +33,7 @@ try:
     from pacman import GameState
 except:
     pass
+
 
 # register arguments and set default values
 def readCommand(argv):
@@ -161,7 +162,7 @@ def setModuleName(module, filename):
 
 # from cStringIO import StringIO
 
-
+"""
 def loadModuleString(moduleSource):
     # Below broken, imp doesn't believe it's being passed a file:
     #    ValueError: load_module arg#2 should be a file or None
@@ -173,26 +174,26 @@ def loadModuleString(moduleSource):
     exec(moduleCodeDict[k] in tmp.__dict__)
     setModuleName(tmp, k)
     return tmp
-
+"""
 
 # import py_compile
 
 
 # https://stackoverflow.com/a/41595552/6949755
-def loadModuleFile(moduleName: str, filePath: str | Path) -> "types.ModuleType":    
+def loadModuleFile(moduleName: str, filePath: str | Path) -> "types.ModuleType":
     spec = importlib.util.spec_from_file_location(moduleName, filePath)
-    if spec is None:
-        raise ImportError(f"Could not load spec for module '{moduleName}' at: {filePath}")
-
-    module = importlib.util.module_from_spec(spec)
-    try:
-        spec.loader.exec_module(module)
-        # sys.modules[moduleName] = module
-    except FileNotFoundError as e:
-        raise ImportError(f"{e.strerror}: {filePath}") from e
-    return module
-
-
+    if spec is None or spec.loader is None:
+        raise ImportError(
+            f"Could not load spec for module '{moduleName}' at: {filePath}"
+        )
+    else:
+        module = importlib.util.module_from_spec(spec)
+        try:
+            spec.loader.exec_module(module)
+            # sys.modules[moduleName] = module
+        except FileNotFoundError as e:
+            raise ImportError(f"{e.strerror}: {filePath}") from e
+        return module
 
 
 def readFile(path, root=""):
@@ -254,7 +255,12 @@ def printTest(testDict, solutionDict):
         print("   |", line)
 
 
-def runTest(testName, moduleDict, printTestCase=False, display=None):
+def runTest(
+    testName,
+    moduleDict: dict[str, "types.ModuleType"],
+    printTestCase=False,
+    display=None,
+):
     import testClasses
     import testParser
 
@@ -265,6 +271,7 @@ def runTest(testName, moduleDict, printTestCase=False, display=None):
     solutionDict = testParser.TestParser(testName + ".solution").parse()
     test_out_file = os.path.join("%s.test_output" % testName)
     testDict["test_out_file"] = test_out_file
+    projectTestClasses = moduleDict["projectTestClasses"]
     testClass = getattr(projectTestClasses, testDict["class"])
 
     questionClass = getattr(testClasses, "Question")
@@ -359,6 +366,7 @@ def evaluate(
             if testDict.get("disabled", "false").lower() == "true":
                 continue
             testDict["test_out_file"] = test_out_file
+            projectTestClasses = moduleDict["projectTestClasses"]
             testClass = getattr(projectTestClasses, testDict["class"])
             testCase = testClass(question, testDict)
 
@@ -405,7 +413,7 @@ def evaluate(
     grades.grade(sys.modules[__name__], bonusPic=projectParams.BONUS_PIC)
     return grades.points
 
-
+#  -> |
 def getDisplay(graphicsByDefault, options=None):
     graphics = graphicsByDefault
     if options is not None and options.noGraphics:
@@ -434,7 +442,7 @@ if __name__ == "__main__":
     # moduleCodeDict['projectTestClasses'] = readFile(options.testCaseCode, root=options.codeRoot)
     # moduleDict = loadModuleDict(moduleCodeDict)
 
-    moduleDict: dict[str, 'types.ModuleType'] = {}
+    moduleDict: dict[str, "types.ModuleType"] = {}
     for cp in codePaths:
         moduleName = re.match(".*?([^/]*)\.py", cp).group(1)
         moduleDict[moduleName] = loadModuleFile(

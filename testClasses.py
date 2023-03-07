@@ -108,7 +108,7 @@ class Q6PartialCreditQuestion(Question):
     """Fails any test which returns False, otherwise doesn't effect the grades object.
     Partial credit tests will add the required points."""
 
-    def execute(self, grades):
+    def execute(self, grades) -> None:
         grades.assignZeroCredit()
 
         results = []
@@ -122,7 +122,7 @@ class PartialCreditQuestion(Question):
     """Fails any test which returns False, otherwise doesn't effect the grades object.
     Partial credit tests will add the required points."""
 
-    def execute(self, grades):
+    def execute(self, grades) -> None:
         grades.assignZeroCredit()
 
         for _, f in self.testCases:
@@ -135,13 +135,13 @@ class PartialCreditQuestion(Question):
 class NumberPassedQuestion(Question):
     """Grade is the number of test cases passed."""
 
-    def execute(self, grades):
+    def execute(self, grades) -> None:
         grades.addPoints([f(grades) for _, f in self.testCases].count(True))
 
 
 # Template modeling a generic test case
 class TestCase(object):
-    def raiseNotDefined(self):
+    def raiseNotDefined(self) -> None:
         print(f"Method not implemented: {inspect.stack()[1][3]}")
         sys.exit(1)
 

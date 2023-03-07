@@ -20,8 +20,9 @@
 # John DeNero (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
 # For more info, see http://inst.eecs.berkeley.edu/~cs188/sp09/pacman.html
 
+from typing import Optional, TextIO
 from util import *
-import time, os
+import time
 import traceback
 import sys
 
@@ -86,6 +87,7 @@ class Configuration:
 
     def __init__(self, pos, direction):
         self.pos = pos
+        # TODO add type
         self.direction = direction
 
     def getPosition(self):
@@ -136,9 +138,9 @@ class AgentState:
         self.start = startConfiguration
         self.configuration = startConfiguration
         self.isPacman = isPacman
-        self.scaredTimer = 0
-        self.numCarrying = 0
-        self.numReturned = 0
+        self.scaredTimer: int = 0
+        self.numCarrying: int = 0
+        self.numReturned: int = 0
 
     def __str__(self):
         if self.isPacman:
@@ -362,7 +364,7 @@ class Actions:
 
     directionToVector = staticmethod(directionToVector)
 
-    def getPossibleActions(config, walls):
+    def getPossibleActions(config, walls) -> list:
         possible = []
         x, y = config.pos
         x_int, y_int = int(x + 0.5), int(y + 0.5)
@@ -473,7 +475,7 @@ class GameStateData:
         for i, state in enumerate(self.agentStates):
             try:
                 int(hash(state))
-            except TypeError(e):
+            except TypeError as e:
                 print(e)
                 # hash(state)
         return int(
@@ -617,27 +619,24 @@ class Game:
         self.agentCrashed = True
         self.rules.agentCrash(self, agentIndex)
 
-    OLD_STDOUT = None
-    OLD_STDERR = None
+    OLD_STDOUT: Optional[TextIO] = None
+    OLD_STDERR: Optional[TextIO] = None
 
     def mute(self, agentIndex):
         if not self.muteAgents:
             return
-        global OLD_STDOUT, OLD_STDERR
         from io import StringIO
-
-        OLD_STDOUT = sys.stdout
-        OLD_STDERR = sys.stderr
+        Game.OLD_STDOUT = sys.stdout
+        Game.OLD_STDERR = sys.stderr
         sys.stdout = self.agentOutput[agentIndex]
         sys.stderr = self.agentOutput[agentIndex]
 
     def unmute(self):
         if not self.muteAgents:
             return
-        global OLD_STDOUT, OLD_STDERR
         # Revert stdout/stderr to originals
-        sys.stdout = OLD_STDOUT
-        sys.stderr = OLD_STDERR
+        sys.stdout = Game.OLD_STDOUT
+        sys.stderr = Game.OLD_STDERR
 
     def run(self):
         """
@@ -677,7 +676,7 @@ class Game:
                             self.agentTimeout = True
                             self._agentCrash(i, quiet=True)
                             return
-                    except Exception(data):
+                    except Exception as data:
                         self._agentCrash(i, quiet=False)
                         self.unmute()
                         return
@@ -710,7 +709,7 @@ class Game:
                             skip_action = True
                         move_time += time.time() - start_time
                         self.unmute()
-                    except Exception(data):
+                    except Exception as data:
                         self._agentCrash(agentIndex, quiet=False)
                         self.unmute()
                         return
@@ -775,7 +774,7 @@ class Game:
                         self.unmute()
                         return
                     self.unmute()
-                except Exception(data):
+                except Exception as data:
                     self._agentCrash(agentIndex)
                     self.unmute()
                     return
@@ -788,7 +787,7 @@ class Game:
             if self.catchExceptions:
                 try:
                     self.state = self.state.generateSuccessor(agentIndex, action)
-                except Exception(data):
+                except Exception as data:
                     self.mute(agentIndex)
                     self._agentCrash(agentIndex)
                     self.unmute()
@@ -819,7 +818,7 @@ class Game:
                     self.mute(agentIndex)
                     agent.final(self.state)
                     self.unmute()
-                except Exception(data):
+                except Exception as data:
                     if not self.catchExceptions:
                         raise
                     self._agentCrash(agentIndex)

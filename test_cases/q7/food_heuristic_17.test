@@ -4,6 +4,7 @@ heuristic: "foodHeuristic"
 searchProblemClass: "FoodSearchProblem"
 layoutName: "Test 17"
 layout: """
+disabled: false
 %%%%%%%%
 %.%....%
 %.% %%.%
